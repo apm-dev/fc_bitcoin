@@ -9,7 +9,6 @@ class PriceScreen extends StatefulWidget {
 }
 
 class _PriceScreenState extends State<PriceScreen> {
-  //6: Update the default currency to AUD, the first item in the currencyList.
   String selectedCurrency = 'AUD';
 
   DropdownButton<String> androidDropdown() {
@@ -28,7 +27,6 @@ class _PriceScreenState extends State<PriceScreen> {
       onChanged: (value) {
         setState(() {
           selectedCurrency = value;
-          //2: Call getData() when the picker/dropdown changes.
           getData();
         });
       },
@@ -45,11 +43,8 @@ class _PriceScreenState extends State<PriceScreen> {
       backgroundColor: Colors.lightBlue,
       itemExtent: 32.0,
       onSelectedItemChanged: (selectedIndex) {
-        print(selectedIndex);
         setState(() {
-          //1: Save the selected currency to the property selectedCurrency
           selectedCurrency = currenciesList[selectedIndex];
-          //2: Call getData() when the picker/dropdown changes.
           getData();
         });
       },
@@ -57,14 +52,16 @@ class _PriceScreenState extends State<PriceScreen> {
     );
   }
 
-  String bitcoinValue = '?';
+  String value = '?';
 
+  //TODO 7: Figure out a way of displaying a '?' on screen while we're waiting for the price data to come back. Hint: You'll need a ternary operator.
+
+  //TODO 6: Update this method to receive a Map containing the crypto:price key value pairs. Then use that map to update the CryptoCards.
   void getData() async {
     try {
-      //We're now passing the selectedCurrency when we call getCoinData().
-      var data = await CoinData().getCoinData(selectedCurrency);
+      double data = await CoinData().getCoinData(selectedCurrency);
       setState(() {
-        bitcoinValue = data;
+        value = data.toStringAsFixed(0);
       });
     } catch (e) {
       print(e);
@@ -77,6 +74,8 @@ class _PriceScreenState extends State<PriceScreen> {
     getData();
   }
 
+  //TODO: For bonus points, create a method that loops through the cryptoList and generates a CryptoCard for each.
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,6 +86,9 @@ class _PriceScreenState extends State<PriceScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
+          //TODO 1: Refactor this Padding Widget into a separate Stateless Widget called CryptoCard, so we can create 3 of them, one for each cryptocurrency.
+          //TODO 2: You'll need to able to pass the selectedCurrency, value and cryptoCurrency to the constructor of this CryptoCard Widget.
+          //TODO 3: You'll need to use a Column Widget to contain the three CryptoCards.
           Padding(
             padding: EdgeInsets.fromLTRB(18.0, 18.0, 18.0, 0),
             child: Card(
@@ -98,8 +100,7 @@ class _PriceScreenState extends State<PriceScreen> {
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 28.0),
                 child: Text(
-                  //5: Update the currency name depending on the selectedCurrency.
-                  '1 BTC = $bitcoinValue $selectedCurrency',
+                  '1 BTC = $value $selectedCurrency',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 20.0,
