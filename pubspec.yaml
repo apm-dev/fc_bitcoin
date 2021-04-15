@@ -9,7 +9,7 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.0
-  #TODO: Add your dependencies here.
+  http: ^0.12.2
 
 dev_dependencies:
   flutter_test:
